@@ -2,15 +2,14 @@ import app from "../server";
 import fs from "fs";
 import path from "path";
 import * as chai from "chai";
-import chaiHttp = require("chai-http");
 import "mocha";
 import controller from "../controllers/cats";
+import { request } from "chai";
 import { chaiImage } from "chai-image";
+import chaiHttp = require("chai-http");
 chai.use(chaiHttp);
 chai.use(chaiImage);
-import { expect, request } from "chai";
-import bodyParser = require("body-parser");
-let should = chai.should();
+
 import helpers from "./helpers";
 
 describe("Mjau DELETE Tests", () => {
@@ -61,8 +60,6 @@ describe("Mjau DELETE Tests", () => {
     getRes.should.have.status(200);
     getRes.body.should.be.a("array");
     getRes.body.should.have.lengthOf(2);
-    let kitties: string[] = [];
-    getRes.body.map((e: any) => kitties.push(e.name));
-    kitties.should.have.members(["Binky", "Moe"]);
+    getRes.body.should.have.members(["Binky", "Moe"]);
   });
 });

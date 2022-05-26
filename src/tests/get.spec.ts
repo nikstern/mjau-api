@@ -53,7 +53,7 @@ describe("Mjau Get Tests", () => {
     getRes.should.have.status(200);
     getRes.body.should.be.a("array");
     getRes.body.should.have.lengthOf(1);
-    getRes.body[0].should.have.property("name", "Binky");
+    getRes.body[0].should.equal("Binky");
   });
   it("/GET with two cats gets Binky and Jerry with 200", async () => {
     await helpers.makeCat("Binky", "Binky");
@@ -62,8 +62,6 @@ describe("Mjau Get Tests", () => {
     getRes.should.have.status(200);
     getRes.body.should.be.a("array");
     getRes.body.should.have.lengthOf(2);
-    let kitties: string[] = [];
-    getRes.body.map((e: any) => kitties.push(e.name));
-    kitties.should.have.members(["Binky", "Jerry"]);
+    getRes.body.should.have.members(["Binky", "Jerry"]);
   });
 });

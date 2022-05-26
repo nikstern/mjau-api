@@ -34,7 +34,7 @@ const getCat = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const getCats = (req: Request, res: Response, next: NextFunction) => {
-  return res.json(Array.from(map.values()));
+  return res.json(Array.from(map.keys()));
 };
 
 const addCat = (req: Request, res: Response, next: NextFunction) => {
