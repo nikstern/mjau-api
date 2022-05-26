@@ -26,7 +26,7 @@ describe("Mjau PUT Tests", () => {
     });
     done();
   });
-  it("/PUT/Binky with no Binky adds Binky with 201", async () => {
+  it("/cats/Binky PUT with no Binky adds Binky with 201", async () => {
     let res = await helpers.putCat("Binky", "Binky");
     res.should.have.status(201);
     res.body.should.be.a("object");
@@ -34,7 +34,7 @@ describe("Mjau PUT Tests", () => {
     res.body.name.should.equal("Binky");
     await helpers.checkCat("Binky", "Binky");
   });
-  it("/PUT/Binky with Binky already updates Binky with Jerry picture with 200", async () => {
+  it("/cats/Binky PUT with Binky already updates Binky with Jerry picture with 200", async () => {
     let res = await helpers.putCat("Binky", "Binky");
     res.should.have.status(201);
     res.body.should.be.a("object");
@@ -48,9 +48,9 @@ describe("Mjau PUT Tests", () => {
     res.body.name.should.equal("Binky");
     await helpers.checkCat("Binky", "Jerry");
   });
-  it("/PUT/Binky with no name gets 400", async () => {
+  it("/cats/Binky PUT with no name gets 400", async () => {
     const res = await request(app)
-      .put("/cat/Binky")
+      .put("/cats/Binky")
       .set("content-type", "multipart/form-data")
       .attach(
         "file",
@@ -61,18 +61,18 @@ describe("Mjau PUT Tests", () => {
     res.body.should.equal("Invalid Request");
     await helpers.checkNoCat("Binky");
   }),
-    it("/PUT/Binky with no image gets 400", async () => {
+    it("/cats/Binky PUT with no image gets 400", async () => {
       const res = await request(app)
-        .put("/cat/Binky")
+        .put("/cats/Binky")
         .set("content-type", "multipart/form-data")
         .field("name", "Binky");
       res.should.have.status(400);
       res.body.should.equal("Invalid Request");
       await helpers.checkNoCat("Binky");
     }),
-    it("/PUT/Binky with a text file gets 400", async () => {
+    it("/cats/Binky PUT with a text file gets 400", async () => {
       const res = await request(app)
-        .put("/cat/Binky")
+        .put("/cats/Binky")
         .set("content-type", "multipart/form-data")
         .attach(
           "file",

@@ -11,7 +11,7 @@ let should = chai.should();
 
 async function makeCat(name: string, catImageName: string): Promise<any> {
   const res = request(app)
-    .post(`/cat/${name}`)
+    .post(`/cats/${name}`)
     .set("content-type", "multipart/form-data")
     .field("name", name)
     .attach(
@@ -23,7 +23,7 @@ async function makeCat(name: string, catImageName: string): Promise<any> {
 }
 async function putCat(name: string, catImageName: string): Promise<any> {
   const res = request(app)
-    .put(`/cat/${name}`)
+    .put(`/cats/${name}`)
     .set("content-type", "multipart/form-data")
     .field("name", name)
     .attach(
@@ -35,13 +35,13 @@ async function putCat(name: string, catImageName: string): Promise<any> {
 }
 
 async function checkCat(name: string, catImageName: string) {
-  let res = await request(app).get(`/cat/${name}`);
+  let res = await request(app).get(`/cats/${name}`);
   const expected = fs.readFileSync(`src/tests/images/${catImageName}.png`);
   res.body.should.matchImage(expected);
 }
 
 async function checkNoCat(name: string) {
-  let res = await request(app).get(`/cat/${name}`);
+  let res = await request(app).get(`/cats/${name}`);
   res.should.have.status(404);
   res.body.should.equal(`I don't have a cat named ${name}`);
 }

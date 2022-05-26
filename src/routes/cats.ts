@@ -4,9 +4,10 @@ import multer from "multer";
 const upload = multer();
 const router = express.Router();
 
-router.post("/cat/:name", controller.uploadImg, controller.addCat);
-router.get("/cat/:name", controller.getCat);
-router.get("/cat", controller.getCats);
-router.put("/cat/:name", controller.uploadImg, controller.updateCat);
-router.delete("/cat/:name", controller.deleteCat);
+router.post("/cats/:name", controller.uploadImg, controller.addCat);
+router.get("/cats/:name", controller.getCat);
+router.get("/cats", controller.getCats);
+router.put("/cats/:name", controller.uploadImg, controller.updateCat);
+router.delete("/cats/:name", controller.deleteCat);
+
 export = router;

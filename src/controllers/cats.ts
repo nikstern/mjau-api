@@ -42,8 +42,7 @@ const addCat = (req: Request, res: Response, next: NextFunction) => {
   const name = req.body.name;
   const path = req.file?.path;
   if (!name || !path) {
-    res.statusCode = 400;
-    return res.json("Invalid Request");
+    return badRequest(req, res, next);
   }
   if (!map.has(name)) {
     const newCat = {
@@ -65,8 +64,7 @@ const updateCat = (req: Request, res: Response, next: NextFunction) => {
   const name = req.body.name;
   const path = req.file?.path;
   if (!name || !path) {
-    res.statusCode = 400;
-    return res.json("Invalid Request");
+    return badRequest(req, res, next);
   }
   if (!map.has(name)) {
     // Created
@@ -96,12 +94,18 @@ const deleteCat = (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const badRequest = (req: Request, res: Response, next: NextFunction) => {
+  res.statusCode = 400;
+  return res.json("Invalid Request");
+};
+
 export default {
   getCats,
   getCat,
   addCat,
   updateCat,
   deleteCat,
+  badRequest,
   map,
   uploadImg,
 };

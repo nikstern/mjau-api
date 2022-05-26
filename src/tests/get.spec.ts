@@ -26,14 +26,14 @@ describe("Mjau Get Tests", () => {
     });
     done();
   });
-  it("/GET/Binky with no Binky gets 404", async () => {
+  it("/cats/Binky GET with no Binky gets 404", async () => {
     await helpers.checkNoCat("Binky");
   });
-  it("/GET/Binky with Binky gets Binky image with 200", async () => {
+  it("/cats/Binky GET with Binky gets Binky image with 200", async () => {
     await helpers.putCat("Binky", "Binky");
     await helpers.checkCat("Binky", "Binky");
   });
-  it("/GET/:id With 3 cats gets each cat with 200", async () => {
+  it("/cats/:id GET with 3 cats gets each cat with 200", async () => {
     await helpers.putCat("Binky", "Binky");
     await helpers.putCat("Jerry", "Jerry");
     await helpers.putCat("Moe", "Moe");
@@ -41,24 +41,24 @@ describe("Mjau Get Tests", () => {
     await helpers.checkCat("Jerry", "Jerry");
     await helpers.checkCat("Moe", "Moe");
   });
-  it("/GET with no cats returns empty list with 200", async () => {
-    let res = await request(app).get("/cat");
+  it("/cats GET with no cats returns empty list with 200", async () => {
+    let res = await request(app).get("/cats");
     res.should.have.status(200);
     res.body.should.be.a("array");
     res.body.should.deep.equal([]);
   });
-  it("/GET with just Binky gets just Binky with 200", async () => {
+  it("/cats GET with just Binky gets just Binky with 200", async () => {
     await helpers.makeCat("Binky", "Binky");
-    let getRes = await request(app).get("/cat");
+    let getRes = await request(app).get("/cats");
     getRes.should.have.status(200);
     getRes.body.should.be.a("array");
     getRes.body.should.have.lengthOf(1);
     getRes.body[0].should.equal("Binky");
   });
-  it("/GET with two cats gets Binky and Jerry with 200", async () => {
+  it("/cats GET with two cats gets Binky and Jerry with 200", async () => {
     await helpers.makeCat("Binky", "Binky");
     await helpers.makeCat("Jerry", "Jerry");
-    let getRes = await request(app).get("/cat");
+    let getRes = await request(app).get("/cats");
     getRes.should.have.status(200);
     getRes.body.should.be.a("array");
     getRes.body.should.have.lengthOf(2);
