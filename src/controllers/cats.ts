@@ -3,6 +3,7 @@ import { Cat } from "../models/cats";
 import multer from "multer";
 import path from "path";
 const helpers = require("../helpers/helpers");
+
 const map = new Map<string, Cat>();
 
 const storage = multer.diskStorage({
