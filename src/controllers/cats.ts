@@ -42,15 +42,7 @@ const addCat = (req: Request, res: Response, next: NextFunction) => {
   const path = req.file?.path;
   if (!name || !path) {
     res.statusCode = 400;
-    let message: string;
-    if (!name && !path) {
-      message = "Invalid Name and Path";
-    } else if (!name) {
-      message = "Invalid Name";
-    } else {
-      message = "Invalid Path";
-    }
-    return res.json(message);
+    return res.json("Invalid Request");
   }
   if (!map.has(name)) {
     const newCat = {
@@ -73,17 +65,8 @@ const updateCat = (req: Request, res: Response, next: NextFunction) => {
   const path = req.file?.path;
   if (!name || !path) {
     res.statusCode = 400;
-    let message: string;
-    if (!name && !path) {
-      message = "Invalid Name and Path";
-    } else if (!name) {
-      message = "Invalid Name";
-    } else {
-      message = "Invalid Path";
-    }
-    return res.json(message);
+    return res.json("Invalid Request");
   }
-
   if (!map.has(name)) {
     // Created
     res.statusCode = 201;
@@ -99,4 +82,25 @@ const updateCat = (req: Request, res: Response, next: NextFunction) => {
   return res.json(newCat);
 };
 
-export default { getCats, getCat, addCat, map, uploadImg };
+const deleteCat = (req: Request, res: Response, next: NextFunction) => {
+  const name = req.params.name;
+  const cat = map.get(name);
+  if (cat) {
+    map.delete(name);
+    res.statusCode = 204;
+    return res.json(`${name} has been removed`);
+  } else {
+    res.statusCode = 404;
+    return res.json(`I don't have a cat named ${name}`);
+  }
+};
+
+export default {
+  getCats,
+  getCat,
+  addCat,
+  updateCat,
+  deleteCat,
+  map,
+  uploadImg,
+};
