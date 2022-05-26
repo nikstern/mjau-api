@@ -22,7 +22,22 @@ const uploadImg = multer({
   fileFilter: helpers.imageFilter,
 }).single("file");
 
-const addCat = (req: any, res: Response, next: NextFunction) => {
+const getCat = (req: Request, res: Response, next: NextFunction) => {
+  const name = req.params.name;
+  const cat = map.get(name);
+  if (cat) {
+    return res.sendFile(path.resolve(cat.path.toString()));
+  } else {
+    res.statusCode = 404;
+    return res.json(`I don't have a cat named ${name}`);
+  }
+};
+
+const getCats = (req: Request, res: Response, next: NextFunction) => {
+  return res.json(Array.from(map.values()));
+};
+
+const addCat = (req: Request, res: Response, next: NextFunction) => {
   const name = req.body.name;
   const path = req.file?.path;
   if (!name || !path) {
@@ -45,7 +60,7 @@ const addCat = (req: any, res: Response, next: NextFunction) => {
     map.set(name, newCat);
     // Created
     res.statusCode = 201;
-    return res.json(req.params);
+    return res.json(newCat);
   } else {
     // Conflict
     res.statusCode = 400;
@@ -53,4 +68,35 @@ const addCat = (req: any, res: Response, next: NextFunction) => {
   }
 };
 
-export default { addCat, map, uploadImg };
+const updateCat = (req: Request, res: Response, next: NextFunction) => {
+  const name = req.body.name;
+  const path = req.file?.path;
+  if (!name || !path) {
+    res.statusCode = 400;
+    let message: string;
+    if (!name && !path) {
+      message = "Invalid Name and Path";
+    } else if (!name) {
+      message = "Invalid Name";
+    } else {
+      message = "Invalid Path";
+    }
+    return res.json(message);
+  }
+
+  if (!map.has(name)) {
+    // Created
+    res.statusCode = 201;
+  } else {
+    // OK/Updated
+    res.statusCode = 200;
+  }
+  const newCat = {
+    name,
+    path,
+  };
+  map.set(name, newCat);
+  return res.json(newCat);
+};
+
+export default { getCats, getCat, addCat, map, uploadImg };
