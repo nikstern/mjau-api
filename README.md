@@ -6,13 +6,17 @@ Welcome to the Mjau cat picture API.
 
 ## Getting Started
 
-### 1. Clone the Repository:
+### 1. Clone the repository:
 
 ### 2. Install the node packages:
 
-### 3. Test the API
+### 3. Create Account
 
-### 4. Run the API
+### 4. Login
+
+### 5. Test the API
+
+### 6. Run the API
 
 ## Endpoints
 

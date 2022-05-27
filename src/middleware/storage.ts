@@ -5,7 +5,7 @@ import path from "path";
 type DestinationCallback = (error: Error | null, destination: string) => void;
 type FileNameCallback = (error: Error | null, filename: string) => void;
 
-export const fileStorage = multer.diskStorage({
+const fileStorage = multer.diskStorage({
   destination: (
     request: Request,
     file: Express.Multer.File,
@@ -25,7 +25,7 @@ export const fileStorage = multer.diskStorage({
   },
 });
 
-export const fileFilter = (
+const fileFilter = (
   request: Request,
   file: Express.Multer.File,
   callback: FileFilterCallback
@@ -40,3 +40,8 @@ export const fileFilter = (
     callback(null, false);
   }
 };
+
+export const uploadImg = multer({
+  storage: fileStorage,
+  fileFilter: fileFilter,
+}).single("image");

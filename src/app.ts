@@ -1,3 +1,4 @@
+require("dotenv").config();
 import express, { Express } from "express";
 import routes from "./routes/cats";
 import bodyParser from "body-parser";

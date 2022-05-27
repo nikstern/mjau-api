@@ -11,8 +11,14 @@ chai.use(chaiHttp);
 chai.use(chaiImage);
 
 import helpers from "./helpers";
-
-describe("Mjau DELETE Tests", () => {
+let token: string;
+describe("Mjau DELETE Tests", async () => {
+  before(async () => {
+    let res = await request(app)
+      .post("/register")
+      .send({ email: "test", password: "test" });
+    token = res.body.token;
+  });
   afterEach((done) => {
     controller.map.clear();
     fs.readdir("uploads", (err, files) => {
@@ -26,37 +32,45 @@ describe("Mjau DELETE Tests", () => {
     done();
   });
   it("/cats/Binky DELETE with no Binky gets 404", async () => {
-    let res = await request(app).delete(`/cats/Binky`);
+    let res = await request(app)
+      .delete(`/cats/Binky`)
+      .set("x-access-token", token);
     res.should.have.status(404);
   });
   it("/cats/Binky DELETE with Binky deletes Binky with 204", async () => {
-    await helpers.makeCat("Binky", "Binky");
-    let res = await request(app).delete(`/cats/Binky`);
+    await helpers.makeCat("Binky", "Binky", token);
+    let res = await request(app)
+      .delete(`/cats/Binky`)
+      .set("x-access-token", token);
     res.should.have.status(204);
-    await helpers.checkNoCat("Binky");
-    let listRes = await request(app).get("/cats");
+    await helpers.checkNoCat("Binky", token);
+    let listRes = await request(app).get("/cats").set("x-access-token", token);
     listRes.should.have.status(200);
     listRes.body.should.be.a("array");
     listRes.body.should.deep.equal([]);
   });
   it("/cats/Binky DELETE can't delete Binky twice with 404", async () => {
-    await helpers.makeCat("Binky", "Binky");
-    let res = await request(app).delete(`/cats/Binky`);
-    res = await request(app).delete(`/cats/Binky`);
+    await helpers.makeCat("Binky", "Binky", token);
+    let res = await request(app)
+      .delete(`/cats/Binky`)
+      .set("x-access-token", token);
+    res = await request(app).delete(`/cats/Binky`).set("x-access-token", token);
     res.should.have.status(404);
-    await helpers.checkNoCat("Binky");
+    await helpers.checkNoCat("Binky", token);
   });
   it("/cats/Jerry DELETE with Jerry, Binky, and Moe has Binky and Moe remain", async () => {
-    await helpers.makeCat("Binky", "Binky");
-    await helpers.makeCat("Jerry", "Jerry");
-    await helpers.makeCat("Moe", "Moe");
-    await helpers.checkCat("Jerry", "Jerry");
-    let res = await request(app).delete(`/cats/Jerry`);
+    await helpers.makeCat("Binky", "Binky", token);
+    await helpers.makeCat("Jerry", "Jerry", token);
+    await helpers.makeCat("Moe", "Moe", token);
+    await helpers.checkCat("Jerry", "Jerry", token);
+    let res = await request(app)
+      .delete(`/cats/Jerry`)
+      .set("x-access-token", token);
     res.should.have.status(204);
-    await helpers.checkNoCat("Jerry");
-    await helpers.checkCat("Binky", "Binky");
-    await helpers.checkCat("Moe", "Moe");
-    let getRes = await request(app).get("/cats");
+    await helpers.checkNoCat("Jerry", token);
+    await helpers.checkCat("Binky", "Binky", token);
+    await helpers.checkCat("Moe", "Moe", token);
+    let getRes = await request(app).get("/cats").set("x-access-token", token);
     getRes.should.have.status(200);
     getRes.body.should.be.a("array");
     getRes.body.should.have.lengthOf(2);
