@@ -33,42 +33,32 @@ describe("Mjau POST Tests", () => {
     res.body.name.should.equal("Binky");
     res.should.have.status(201);
     await helpers.checkCat("Binky", "Binky");
-  }),
-    it("/cats/Binky POST with no name field gets 400", async () => {
-      const res = await request(app)
-        .post("/cats/Binky")
-        .set("content-type", "multipart/form-data")
-        .attach(
-          "file",
-          fs.readFileSync("src/tests/images/Jerry.png"),
-          "Jerry.jpg"
-        );
-      res.should.have.status(400);
-      res.body.should.equal("Invalid Request");
-      await helpers.checkNoCat("Binky");
-    }),
-    it("/cats/Binky POST with no image attached gets 400", async () => {
-      const res = await request(app)
-        .post("/cats/Binky")
-        .set("content-type", "multipart/form-data")
-        .field("name", "Binky");
-      res.should.have.status(400);
-      res.body.should.equal("Invalid Request");
-      await helpers.checkNoCat("Binky");
-    }),
-    it("/cats/Binky POST with a text file image gets 400", async () => {
-      const res = await request(app)
-        .post("/cats/Binky")
-        .set("content-type", "multipart/form-data")
-        .attach(
-          "file",
-          fs.readFileSync("src/tests/images/input.txt"),
-          "Jerry.png"
-        );
-      res.should.have.status(400);
-      res.body.should.equal("Invalid Request");
-      await helpers.checkNoCat("Binky");
-    });
+  });
+  it("/cats/ POST with no name field gets 404", async () => {
+    const res = await request(app)
+      .post("/cats/")
+      .set("content-type", "multipart/form-data")
+      .attach(
+        "image",
+        fs.readFileSync("src/tests/images/Jerry.png"),
+        "Jerry.png"
+      );
+    res.should.have.status(404);
+    await helpers.checkNoCat("Binky");
+  });
+  it("/cats/Binky POST with a text file image gets 400", async () => {
+    const res = await request(app)
+      .post("/cats/Binky")
+      .set("content-type", "multipart/form-data")
+      .attach(
+        "image",
+        fs.readFileSync("src/tests/images/input.txt"),
+        "input.txt"
+      );
+    res.should.have.status(400);
+    res.body.message.should.equal("Invalid Request");
+    await helpers.checkNoCat("Binky");
+  });
   it("/cats/Binky POST with Binky already gets 400", async () => {
     let res = await helpers.makeCat("Binky", "Binky");
     res.should.have.status(201);
@@ -78,7 +68,7 @@ describe("Mjau POST Tests", () => {
     // Duplicate Request
     res = await helpers.makeCat("Binky", "Jerry");
     res.should.have.status(400);
-    res.body.should.equal("We've got this Cat");
+    res.body.message.should.equal("We've got this Cat");
     await helpers.checkCat("Binky", "Binky");
   });
 });

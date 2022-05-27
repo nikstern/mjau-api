@@ -1,27 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { Cat } from "../models/cats";
-import multer from "multer";
 import path from "path";
-const helpers = require("../helpers/helpers");
 
 const map = new Map<string, Cat>();
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./uploads");
-  },
-  filename: function (req, file, cb) {
-    cb(
-      null,
-      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
-    );
-  },
-});
-
-const uploadImg = multer({
-  storage: storage,
-  fileFilter: helpers.imageFilter,
-}).single("file");
 
 const getCat = (req: Request, res: Response, next: NextFunction) => {
   const name = req.params.name;
@@ -30,7 +11,7 @@ const getCat = (req: Request, res: Response, next: NextFunction) => {
     return res.sendFile(path.resolve(cat.path.toString()));
   } else {
     res.statusCode = 404;
-    return res.json(`I don't have a cat named ${name}`);
+    return res.json({ message: `I don't have a cat named ${name}` });
   }
 };
 
@@ -39,11 +20,11 @@ const getCats = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const addCat = (req: Request, res: Response, next: NextFunction) => {
-  const name = req.body.name;
-  const path = req.file?.path;
-  if (!name || !path) {
+  const name = req.params.name;
+  if (name == undefined || !req.file) {
     return badRequest(req, res, next);
   }
+  const path = req.file?.path;
   if (!map.has(name)) {
     const newCat = {
       name,
@@ -52,18 +33,18 @@ const addCat = (req: Request, res: Response, next: NextFunction) => {
     map.set(name, newCat);
     // Created
     res.statusCode = 201;
-    return res.json(newCat);
+    return res.json({ name: name });
   } else {
     // Conflict
     res.statusCode = 400;
-    return res.json("We've got this Cat");
+    return res.json({ message: "We've got this Cat" });
   }
 };
 
 const updateCat = (req: Request, res: Response, next: NextFunction) => {
-  const name = req.body.name;
+  const name = req.params.name;
   const path = req.file?.path;
-  if (!name || !path) {
+  if (name == undefined || path == undefined) {
     return badRequest(req, res, next);
   }
   if (!map.has(name)) {
@@ -78,7 +59,7 @@ const updateCat = (req: Request, res: Response, next: NextFunction) => {
     path,
   };
   map.set(name, newCat);
-  return res.json(newCat);
+  return res.json({ name: name });
 };
 
 const deleteCat = (req: Request, res: Response, next: NextFunction) => {
@@ -87,16 +68,16 @@ const deleteCat = (req: Request, res: Response, next: NextFunction) => {
   if (cat) {
     map.delete(name);
     res.statusCode = 204;
-    return res.json(`${name} has been removed`);
+    return res.json({ message: `${name} has been removed` });
   } else {
     res.statusCode = 404;
-    return res.json(`I don't have a cat named ${name}`);
+    return res.json({ message: `I don't have a cat named ${name}` });
   }
 };
 
 const badRequest = (req: Request, res: Response, next: NextFunction) => {
   res.statusCode = 400;
-  return res.json("Invalid Request");
+  return res.json({ message: "Invalid Request" });
 };
 
 export default {
@@ -107,5 +88,4 @@ export default {
   deleteCat,
   badRequest,
   map,
-  uploadImg,
 };

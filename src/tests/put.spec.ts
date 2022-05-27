@@ -48,26 +48,22 @@ describe("Mjau PUT Tests", () => {
     res.body.name.should.equal("Binky");
     await helpers.checkCat("Binky", "Jerry");
   });
-  it("/cats/Binky PUT with no name gets 400", async () => {
+  it("/cats/ PUT with no name gets 404", async () => {
     const res = await request(app)
-      .put("/cats/Binky")
+      .put("/cats/")
       .set("content-type", "multipart/form-data")
       .attach(
-        "file",
+        "image",
         fs.readFileSync("src/tests/images/Jerry.png"),
-        "Jerry.jpg"
+        "Jerry.png"
       );
-    res.should.have.status(400);
-    res.body.should.equal("Invalid Request");
+    res.should.have.status(404);
     await helpers.checkNoCat("Binky");
   }),
     it("/cats/Binky PUT with no image gets 400", async () => {
-      const res = await request(app)
-        .put("/cats/Binky")
-        .set("content-type", "multipart/form-data")
-        .field("name", "Binky");
+      const res = await request(app).put("/cats/Binky");
       res.should.have.status(400);
-      res.body.should.equal("Invalid Request");
+      res.body.message.should.equal("Invalid Request");
       await helpers.checkNoCat("Binky");
     }),
     it("/cats/Binky PUT with a text file gets 400", async () => {
@@ -75,12 +71,12 @@ describe("Mjau PUT Tests", () => {
         .put("/cats/Binky")
         .set("content-type", "multipart/form-data")
         .attach(
-          "file",
+          "image",
           fs.readFileSync("src/tests/images/input.txt"),
-          "Jerry.png"
+          "input.txt"
         );
       res.should.have.status(400);
-      res.body.should.equal("Invalid Request");
+      res.body.message.should.equal("Invalid Request");
       await helpers.checkNoCat("Binky");
     });
 });

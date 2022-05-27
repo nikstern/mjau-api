@@ -13,9 +13,8 @@ async function makeCat(name: string, catImageName: string): Promise<any> {
   const res = request(app)
     .post(`/cats/${name}`)
     .set("content-type", "multipart/form-data")
-    .field("name", name)
     .attach(
-      "file",
+      "image",
       fs.readFileSync(`src/tests/images/${catImageName}.png`),
       `${catImageName}.jpg`
     );
@@ -25,9 +24,8 @@ async function putCat(name: string, catImageName: string): Promise<any> {
   const res = request(app)
     .put(`/cats/${name}`)
     .set("content-type", "multipart/form-data")
-    .field("name", name)
     .attach(
-      "file",
+      "image",
       fs.readFileSync(`src/tests/images/${catImageName}.png`),
       `${catImageName}.jpg`
     );
@@ -43,7 +41,7 @@ async function checkCat(name: string, catImageName: string) {
 async function checkNoCat(name: string) {
   let res = await request(app).get(`/cats/${name}`);
   res.should.have.status(404);
-  res.body.should.equal(`I don't have a cat named ${name}`);
+  res.body.message.should.equal(`I don't have a cat named ${name}`);
 }
 
 export default { checkCat, checkNoCat, makeCat, putCat };
