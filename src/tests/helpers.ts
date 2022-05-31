@@ -21,7 +21,7 @@ async function makeCat(
     .attach(
       "image",
       fs.readFileSync(`src/tests/images/${catImageName}.png`),
-      `${catImageName}.jpg`
+      `${catImageName}.png`
     );
   return res;
 }
@@ -37,7 +37,7 @@ async function putCat(
     .attach(
       "image",
       fs.readFileSync(`src/tests/images/${catImageName}.png`),
-      `${catImageName}.jpg`
+      `${catImageName}.png`
     );
   return res;
 }

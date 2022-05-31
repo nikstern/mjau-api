@@ -37,22 +37,26 @@ describe("Mjau PUT Tests", () => {
     let res = await helpers.putCat("Binky", "Binky", token);
     res.should.have.status(201);
     res.body.should.be.a("object");
-    res.body.should.have.property("name");
-    res.body.name.should.equal("Binky");
+    res.body.should.have.property("message");
+    res.body.message.should.equal(
+      "Added a cat named Binky with an image Binky.png"
+    );
     await helpers.checkCat("Binky", "Binky", token);
   });
   it("/cats/Binky PUT with Binky already updates Binky with Jerry picture with 200", async () => {
     let res = await helpers.putCat("Binky", "Binky", token);
     res.should.have.status(201);
     res.body.should.be.a("object");
-    res.body.should.have.property("name");
-    res.body.name.should.equal("Binky");
+    res.body.should.have.property("message");
+    res.body.message.should.equal(
+      "Added a cat named Binky with an image Binky.png"
+    );
     await helpers.checkCat("Binky", "Binky", token);
     res = await helpers.putCat("Binky", "Jerry", token);
     res.should.have.status(200);
     res.body.should.be.a("object");
-    res.body.should.have.property("name");
-    res.body.name.should.equal("Binky");
+    res.body.should.have.property("message");
+    res.body.message.should.equal("Binky now has the image Jerry.png");
     await helpers.checkCat("Binky", "Jerry", token);
   });
   it("/cats/ PUT with no name gets 404", async () => {

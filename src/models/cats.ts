@@ -1,6 +1,6 @@
 interface Cat {
-  name: String;
-  path: String;
+  name: string;
+  path: string;
 }
 
 export { Cat };

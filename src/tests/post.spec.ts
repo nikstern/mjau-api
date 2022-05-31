@@ -34,8 +34,10 @@ describe("Mjau POST Tests", () => {
   it("/cats/Binky POST with no Binky makes Binky and gets 201", async () => {
     const res = await helpers.makeCat("Binky", "Binky", token);
     res.body.should.be.a("object");
-    res.body.should.have.property("name");
-    res.body.name.should.equal("Binky");
+    res.body.should.have.property("message");
+    res.body.message.should.equal(
+      "Added a cat named Binky with an image Binky.png"
+    );
     res.should.have.status(201);
     await helpers.checkCat("Binky", "Binky", token);
   });
@@ -70,8 +72,10 @@ describe("Mjau POST Tests", () => {
     let res = await helpers.makeCat("Binky", "Binky", token);
     res.should.have.status(201);
     res.body.should.be.a("object");
-    res.body.should.have.property("name");
-    res.body.name.should.equal("Binky");
+    res.body.should.have.property("message");
+    res.body.message.should.equal(
+      "Added a cat named Binky with an image Binky.png"
+    );
     // Duplicate Request
     res = await helpers.makeCat("Binky", "Jerry", token);
     res.should.have.status(400);

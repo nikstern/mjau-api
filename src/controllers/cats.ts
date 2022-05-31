@@ -8,7 +8,7 @@ const getCat = (req: Request, res: Response, next: NextFunction) => {
   const name = req.params.name;
   const cat = map.get(name);
   if (cat) {
-    return res.sendFile(path.resolve(cat.path.toString()));
+    return res.sendFile(path.resolve(cat.path));
   } else {
     return res
       .status(404)
@@ -33,7 +33,9 @@ const addCat = (req: Request, res: Response, next: NextFunction) => {
     };
     map.set(name, newCat);
     // Created
-    return res.status(201).json({ name: name });
+    return res.status(201).json({
+      message: `Added a cat named ${name} with an image ${req.file.originalname}`,
+    });
   } else {
     // Conflict
     return res.status(400).json({ message: "We've got this Cat" });
@@ -46,19 +48,24 @@ const updateCat = (req: Request, res: Response, next: NextFunction) => {
   if (name == undefined || path == undefined) {
     return badRequest(req, res, next);
   }
+  let message: string;
   if (!map.has(name)) {
     // Created
     res.statusCode = 201;
+    message = `Added a cat named ${name} with an image ${req.file?.originalname}`;
   } else {
     // OK/Updated
     res.statusCode = 200;
+    message = `${name} now has the image ${req.file?.originalname}`;
   }
   const newCat = {
     name,
     path,
   };
   map.set(name, newCat);
-  return res.json({ name: name });
+  return res.json({
+    message,
+  });
 };
 
 const deleteCat = (req: Request, res: Response, next: NextFunction) => {
