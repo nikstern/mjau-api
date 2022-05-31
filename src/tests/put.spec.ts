@@ -8,11 +8,12 @@ import controller from "../controllers/cats";
 import { chaiImage } from "chai-image";
 chai.use(chaiHttp);
 chai.use(chaiImage);
-import { expect, request } from "chai";
-import bodyParser = require("body-parser");
+import { request } from "chai";
 let should = chai.should();
 import helpers from "./helpers";
+
 let token: string;
+
 describe("Mjau PUT Tests", () => {
   before(async () => {
     let res = await request(app)

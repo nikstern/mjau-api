@@ -40,7 +40,7 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
 
     if (!(email && password)) {
-      res.status(400).send("Email and password are required");
+      return res.status(400).send("Email and password are required");
     }
     const user = userMap.get(email);
     if (user && (await bcrypt.compare(password, user.password))) {
@@ -49,9 +49,9 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
       });
       user.token = token;
       userMap.set(email, user);
-      res.status(200).json(user);
+      return res.status(200).json(user);
     }
-    res.status(400).send("Invalid Credentials");
+    return res.status(400).send("Invalid Credentials");
   } catch (err) {
     console.log(err);
   }

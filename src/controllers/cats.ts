@@ -10,8 +10,9 @@ const getCat = (req: Request, res: Response, next: NextFunction) => {
   if (cat) {
     return res.sendFile(path.resolve(cat.path.toString()));
   } else {
-    res.statusCode = 404;
-    return res.json({ message: `I don't have a cat named ${name}` });
+    return res
+      .status(404)
+      .json({ message: `I don't have a cat named ${name}` });
   }
 };
 
@@ -32,12 +33,10 @@ const addCat = (req: Request, res: Response, next: NextFunction) => {
     };
     map.set(name, newCat);
     // Created
-    res.statusCode = 201;
-    return res.json({ name: name });
+    return res.status(201).json({ name: name });
   } else {
     // Conflict
-    res.statusCode = 400;
-    return res.json({ message: "We've got this Cat" });
+    return res.status(400).json({ message: "We've got this Cat" });
   }
 };
 
@@ -67,17 +66,16 @@ const deleteCat = (req: Request, res: Response, next: NextFunction) => {
   const cat = map.get(name);
   if (cat) {
     map.delete(name);
-    res.statusCode = 204;
-    return res.json({ message: `${name} has been removed` });
+    return res.status(204).json({ message: `${name} has been removed` });
   } else {
-    res.statusCode = 404;
-    return res.json({ message: `I don't have a cat named ${name}` });
+    return res
+      .status(404)
+      .json({ message: `I don't have a cat named ${name}` });
   }
 };
 
 const badRequest = (req: Request, res: Response, next: NextFunction) => {
-  res.statusCode = 400;
-  return res.json({ message: "Invalid Request" });
+  return res.status(400).json({ message: "Invalid Request" });
 };
 
 export default {
