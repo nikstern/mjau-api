@@ -73,7 +73,7 @@ const deleteCat = (req: Request, res: Response, next: NextFunction) => {
   const cat = map.get(name);
   if (cat) {
     map.delete(name);
-    return res.status(204).json({ message: `${name} has been removed` });
+    return res.json({ message: `Deleted ${name}` });
   } else {
     return res
       .status(404)

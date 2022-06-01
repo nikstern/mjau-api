@@ -46,13 +46,13 @@ describe("Mjau Get Tests", () => {
     await helpers.checkCat("Jerry", "Jerry", token);
     await helpers.checkCat("Moe", "Moe", token);
   });
-  it("/cats GET with no cats returns empty list with 200", async () => {
+  it("/cats GET with no cats returns empty list [] with 200", async () => {
     let res = await request(app).get("/cats").set("x-access-token", token);
     res.should.have.status(200);
     res.body.should.be.a("array");
     res.body.should.deep.equal([]);
   });
-  it("/cats GET with just Binky gets just Binky with 200", async () => {
+  it("/cats GET with just Binky gets just [Binky] with 200", async () => {
     await helpers.makeCat("Binky", "Binky", token);
     let getRes = await request(app).get("/cats").set("x-access-token", token);
     getRes.should.have.status(200);
@@ -60,7 +60,7 @@ describe("Mjau Get Tests", () => {
     getRes.body.should.have.lengthOf(1);
     getRes.body[0].should.equal("Binky");
   });
-  it("/cats GET with two cats gets Binky and Jerry with 200", async () => {
+  it("/cats GET with two cats gets [Binky, Jerry] with 200", async () => {
     await helpers.makeCat("Binky", "Binky", token);
     await helpers.makeCat("Jerry", "Jerry", token);
     let getRes = await request(app).get("/cats").set("x-access-token", token);

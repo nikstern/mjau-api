@@ -42,7 +42,9 @@ describe("Mjau DELETE Tests", async () => {
     let res = await request(app)
       .delete(`/cats/Binky`)
       .set("x-access-token", token);
-    res.should.have.status(204);
+    res.should.have.status(200);
+    res.body.should.have.property("message");
+    res.body.message.should.equal("Deleted Binky");
     await helpers.checkNoCat("Binky", token);
     let listRes = await request(app).get("/cats").set("x-access-token", token);
     listRes.should.have.status(200);
@@ -66,7 +68,9 @@ describe("Mjau DELETE Tests", async () => {
     let res = await request(app)
       .delete(`/cats/Jerry`)
       .set("x-access-token", token);
-    res.should.have.status(204);
+    res.should.have.status(200);
+    res.body.should.have.property("message");
+    res.body.message.should.equal("Deleted Jerry");
     await helpers.checkNoCat("Jerry", token);
     await helpers.checkCat("Binky", "Binky", token);
     await helpers.checkCat("Moe", "Moe", token);

@@ -42,28 +42,52 @@ async function putCat(
   return res;
 }
 
+async function getCat(name: string, token: string) {
+  return await request(app).get(`/cats/${name}`).set("x-access-token", token);
+}
+
 async function checkCat(name: string, catImageName: string, token: string) {
-  let res = await request(app)
-    .get(`/cats/${name}`)
-    .set("x-access-token", token);
+  let res = await getCat(name, token);
   const expected = fs.readFileSync(`src/tests/images/${catImageName}.png`);
   res.body.should.matchImage(expected);
 }
 
 async function checkNoCat(name: string, token: string) {
-  let res = await request(app)
-    .get(`/cats/${name}`)
-    .set("x-access-token", token);
+  let res = await getCat(name, token);
   res.should.have.status(404);
   res.body.message.should.equal(`I don't have a cat named ${name}`);
 }
 
-async function login(email: string, password: string): Promise<string> {
-  let res = await request(app)
-    .post("/login")
-    .send({ email: email, password: password });
-  res.should.have.status(200);
-  return res.body.token;
+async function listCats(token: string) {
+  return await request(app).get("/cats/").set("x-access-token", token);
 }
 
-export default { checkCat, checkNoCat, makeCat, putCat, login };
+async function deleteCat(name: string, token: string) {
+  return await request(app)
+    .delete(`/cats/${name}`)
+    .set("x-access-token", token);
+}
+
+async function register(email: string, password: string) {
+  return await request(app)
+    .post("/register")
+    .send({ email: email, password: password });
+}
+
+async function login(email: string, password: string) {
+  return await request(app)
+    .post("/login")
+    .send({ email: email, password: password });
+}
+
+export default {
+  getCat,
+  checkCat,
+  checkNoCat,
+  makeCat,
+  deleteCat,
+  listCats,
+  putCat,
+  login,
+  register,
+};

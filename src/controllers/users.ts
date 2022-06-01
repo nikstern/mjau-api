@@ -9,7 +9,6 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, password } = req.body;
     if (!(email && password)) {
-      console.log(req);
       return res.status(400).send("Email and password are required");
     }
     const existingUser = userMap.get(email);
