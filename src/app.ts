@@ -1,9 +1,10 @@
 require("dotenv").config();
 import express from "express";
 import routes from "./routes/cats";
-
+const errorHandler = require("./middleware/error");
 const app = express();
 app.use(express.json());
 app.use("/", routes);
-app.set("port", process.env.PORT || 3000);
+app.use(errorHandler);
+app.set("port", process.env.PORT || 4000);
 export default app;
