@@ -61,5 +61,11 @@ describe("Mjau Authentication Tests", async () => {
     res.should.have.property("body");
     res.body.should.not.have.property("token");
   });
-  it("/login POST rejects wrong user with 400", async () => {});
+  it("/login POST rejects wrong user with 400", async () => {
+    (await helpers.register("authtest5", "test5")).should.have.status(201);
+    let res = await helpers.login("authtest10", "test5");
+    res.should.have.status(400);
+    res.should.have.property("body");
+    res.body.should.not.have.property("token");
+  });
 });
