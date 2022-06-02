@@ -37,7 +37,7 @@ describe("Mjau DELETE Tests", async () => {
       .set("x-access-token", token);
     res.should.have.status(404);
   });
-  it("/cats/Binky DELETE with Binky deletes Binky with 204", async () => {
+  it("/cats/Binky DELETE with Binky deletes Binky with 200", async () => {
     await helpers.makeCat("Binky", "Binky", token);
     let res = await request(app)
       .delete(`/cats/Binky`)

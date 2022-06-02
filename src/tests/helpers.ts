@@ -30,7 +30,7 @@ async function putCat(
   catImageName: string,
   token: string
 ): Promise<any> {
-  const res = request(app)
+  const res = await request(app)
     .put(`/cats/${name}`)
     .set("content-type", "multipart/form-data")
     .set("x-access-token", token)
