@@ -4,6 +4,8 @@ Welcome to the Mjau cat picture API.
 
 > **Mjau**: The Swedish onomatopoeia for the sound a cat makes. Similar to the English "meow" and pronounced the same.
 
+[Loom Demonstration](https://www.loom.com/share/3035a004969a4cb4af315736f3c7a240)
+
 ## Running with Docker
 
 To run the application via Docker, make sure Docker is installed on your system then run:
@@ -20,7 +22,7 @@ On a local client of Postman, we can import a collection of useful preset reques
 
 `https://www.getpostman.com/collections/721f4063d15f2bb8d619`
 
-To import open a workspace and click Import in the upper right corner. Then click the link tab and paste the link above inside.
+To import open a workspace and click Import in the upper right corner. Then click the `Link` tab and paste the link above inside.
 
 Note: Sometimes Postman seems to struggle to use the images saved in the collection. Upload your own images if there are any saved in the collection.
 
